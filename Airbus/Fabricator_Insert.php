@@ -19,30 +19,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lastItemId = $lastItemRow['item_id'];
     }
     
-    // Increment the value of the last item_id by 1
     $newItemId = '';
     if (!empty($lastItemId)) {
-        $lastValue = substr($lastItemId, 1); // Extract the numeric part after 'T'
-        $newItemValue = intval($lastValue) + 1; // Increment the numeric value
-        $newItemId = 'T' . $newItemValue; // Combine the prefix 'T' with the incremented value
+        $lastValue = substr($lastItemId, 1); 
+        $newItemValue = intval($lastValue) + 1; 
+        $newItemId = 'T' . $newItemValue; 
     } else {
         $newItemId = 'T1'; // If no previous item_id found, set the initial value
     }
     
-    // Perform the insertion with the new item_id
     $sql = "INSERT INTO fabrication (item, item_id, raw_material, Quantity, in_date, out_date) VALUES ('$item', '$newItemId', '$material', '$quantity', '$inDate', '$outDate')";
     
     if (mysqli_query($conn, $sql)) {
-        header("Location: Fabricator_Insert.php");
+        echo "<script type='text/javascript'>alert('Fabricator details added successfully');
+        window.location='Fabricator_Insert.php';</script>";
+        die;
     } else {
-        echo "Error: " . mysqli_error($conn);
+        echo "<script type='text/javascript'>alert('Error in inserting details');
+        window.location='Fabricator_Insert.php';</script>";
+        die;
     }
     
     mysqli_close($conn); 
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html>

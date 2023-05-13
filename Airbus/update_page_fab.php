@@ -6,6 +6,16 @@
         $out_date = $_POST['end_date'];
         $query = "UPDATE fabrication SET out_date = '$out_date' WHERE item_id = '$item_id'";
         mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query);
+        if ($result==true) {
+            echo "<script type='text/javascript'>alert('End-date updated successfully');
+            window.location='Fabricator_dashboard.php';</script>";
+            die;
+        } else{
+            echo "<script type='text/javascript'>alert('Error in updating details');
+            window.location='Fabricator_dashboard.php';</script>";
+            die;
+        } 
     }
 
 ?>

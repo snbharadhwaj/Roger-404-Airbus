@@ -50,37 +50,9 @@
 					}
 				}
 				mysqli_close($conn);
-
-				function getItemStatus($itemId)
-				{
-					global $conn;
-					$query = "SELECT Ass_Status FROM Ass_Approval WHERE Machine_ID = '$itemId'";
-					$result = mysqli_query($conn, $query);
-					if ($result && mysqli_num_rows($result) > 0) {
-						$row = mysqli_fetch_assoc($result);
-						return $row['Ass_Status'];
-					}
-					return 0; 
-				}
 			?>
 			</tbody>
 		</table>
 	</div>
-
-	<script>
-		function updateStatus(itemId) {
-			$.ajax({
-				type: "POST",
-				url: "update_status_ass.php",
-				data: { itemId: itemId },
-				success: function(response) {
-					console.log(response);
-				},
-				error: function(xhr, status, error) {
-					console.error(xhr.responseText);
-				}
-			});
-		}
-	</script>
 </body>
 </html>

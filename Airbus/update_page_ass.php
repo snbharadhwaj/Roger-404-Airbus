@@ -5,7 +5,16 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $out_date = $_POST['end_date'];
         $query = "UPDATE assembly SET end_date = '$out_date' WHERE Machine_ID = '$ASS_ID'";
-        mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query);
+        if ($result == true) {
+            echo "<script type='text/javascript'>alert('End-date updated successfully');
+            window.location='Assembly_dashboard.php';</script>";
+            die;
+        } else{
+            echo "<script type='text/javascript'>alert('Error in updating details');
+            window.location='Assembly_dashboard.php';</script>";
+            die;
+        } 
     }
 
 ?>

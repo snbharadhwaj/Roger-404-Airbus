@@ -5,7 +5,16 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $out_date = $_POST['end_date'];
         $query = "UPDATE sub_assembly SET end_date = '$out_date' WHERE Assembly_ID = '$ASS_ID'";
-        mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query);
+        if ($result==true) {
+            echo "<script type='text/javascript'>alert('End-date updated successfully');
+            window.location='Sub_Assembly_dashboard.php';</script>";
+            die;
+        } else{
+            echo "<script type='text/javascript'>alert('Error in updating details');
+            window.location='Sub_Assembly_dashboard.php';</script>";
+            die;
+        } 
     }
 
 ?>
@@ -18,6 +27,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">

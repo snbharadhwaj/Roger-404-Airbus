@@ -32,8 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
 
-    header("Location: Subassembly_Insert.php");
-    exit();
+	echo "<script type='text/javascript'>alert('Sub-Assembly details updated successfully');
+	window.location='Subassembly_Insert.php';</script>";
+	die;
 }
 ?>
 

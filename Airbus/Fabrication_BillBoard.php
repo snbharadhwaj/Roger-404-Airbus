@@ -21,6 +21,9 @@
                     <a class="nav-link" href="admin_dashboard.php">Home</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="admin_Approval.php">Approval</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="Fabrication_BillBoard.php">Fabrication</a>
                 </li>
                 <li class="nav-item">
