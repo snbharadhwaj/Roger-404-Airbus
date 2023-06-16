@@ -1,19 +1,28 @@
 <?php
 
-include_once('config.php');
+    include_once('connect/config.php');
 
-$sql = "SELECT * FROM supply_chain_data";
-$result = mysqli_query($conn, $sql);
+    $data = array();
 
-$data = array();
-
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $data[] = $row;
+    $sql = "SELECT COUNT(*) AS ApprovedCount FROM supply_chain_data";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $data['ApprovedCount'] = $row['ApprovedCount'];
+    } else {
+        $data['ApprovedCount'] = 0;
     }
-}
-mysqli_close($conn);
+    $sql = "SELECT COUNT(*) AS assemblyCount FROM assembly WHERE Approval = 0";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $data['assemblyCount'] = $row['assemblyCount'];
+    } else {
+        $data['assemblyCount'] = 0;
+    }
 
-header('Content-Type: application/json');
-echo json_encode($data);
+    mysqli_close($conn);
+
+    header('Content-Type: application/json');
+    echo json_encode($data);
 ?>

@@ -8,6 +8,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #FF836B;
+        }
+        table {
+            background-color: white;
+        }
+        .table thead th {
+            border-bottom: 1px solid black;
+        }
+        .table tbody td {
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
+        }
+        .table tbody td:last-child {
+            border-right: none;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -24,13 +42,16 @@
                     <a class="nav-link" href="admin_Approval.php">Approval</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Fabrication_BillBoard.php">Fabrication</a>
+                    <a class="nav-link" href="Admin_Dashboard/Fabrication_BillBoard.php">Fabrication</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="SubAssembly_Billboard.php">Sub-Assembly</a>
+                    <a class="nav-link" href="Admin_Dashboard/SubAssembly_Billboard.php">Sub-Assembly</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Assembly_Billboard.php">Assembly</a>
+                    <a class="nav-link" href="Admin_Dashboard/Assembly_Billboard.php">Assembly</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="chart.php">Charts</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>
@@ -38,81 +59,85 @@
             </ul>
         </div>
     </nav>
-    <br><br><br>
-    <div class="container">
-        <h2>Real Time Data</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Machine ID</th>
-                    <th>Assembly Process</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-                include_once('config.php');
+    <br>
 
-                $sql = "SELECT * FROM supply_chain_data";
-                $result = mysqli_query($conn, $sql);
+    <main role="main" class="container">
+        <h2>Approved Data - Dashboard</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Machine ID</th>
+                        <th>Assembly Process</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        session_start();
+                        include_once('connect/config.php');
+                        $sql = "SELECT * FROM supply_chain_data";
+                        $result = mysqli_query($conn, $sql);
 
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['Machine_ID'] . "</td>";
-                    echo "<td>" . $row['process'] . "</td>";
-                    echo "<td>" . $row['start_date'] . "</td>";
-                    echo "<td>" . $row['end_date'] . "</td>";
-                    echo "</tr>";
-                }
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>" . $row['Machine_ID'] . "</td>";
+                            echo "<td>" . ucwords($row['process_Name']) . "</td>";
+                            echo "<td>" . date('d-m-Y', strtotime($row["start_date"])) . "</td>";
+                            echo "<td>" . date('d-m-Y', strtotime($row["end_date"])) . "</td>";
+                            echo "</tr>";
+                        }
 
-                mysqli_close($conn);
-            ?>
-            </tbody>
-        </table>
+                        mysqli_close($conn);
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div class="container" style="max-width: 500px; margin-top: 80px; margin-bottom: 80px;">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">Data Analytics</h2>
+                <canvas id="chart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="container" style="max-width: 500px; height: 400px; margin-top: 80px;margin-bottom: 80px;">
-        <h2>Supply Chain Data</h2>
-        <canvas id="chart"></canvas>
-    </div>
+
+
     <script>
         $(document).ready(function() {
             $.ajax({
                 url: 'fetch_supply_chain_data.php',
                 dataType: 'json',
                 success: function(data) {
-                    var supplyChainCount = data.length;
-
-                    $.ajax({
-                        url: 'fetch_assembly_data.php',
-                        dataType: 'json',
-                        success: function(data) {
-                            var assemblyCount = data.length - supplyChainCount;
-                            var ctx = document.getElementById('chart').getContext('2d');
-                            var chart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: ['Supply Chain Data', 'Assembly Data'],
-                                    datasets: [{
-                                        label: 'Data Count',
-                                        data: [supplyChainCount, assemblyCount],
-                                        backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)'],
-                                        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    maintainAspectRatio: false,
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            stepSize: 1
-                                        }
-                                    }
+                    var ctx = document.getElementById('chart').getContext('2d');
+                    var chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Approved Data', 'Assembly Data'],
+                            datasets: [{
+                                label: 'Data Count',
+                                data: [data.ApprovedCount, data.assemblyCount],
+                                backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)'],
+                                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    stepSize: 1
                                 }
-                            });
+                            }
                         }
                     });
+                },
+                error: function(xhr, status, error) {
+                    console.log('AJAX request error:', error);
                 }
             });
         });

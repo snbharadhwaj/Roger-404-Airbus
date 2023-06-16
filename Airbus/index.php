@@ -6,19 +6,28 @@
   <title>Washing Machine Database Administration Login</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #FF836B;
+    }
+
+    .card {
+      margin-top: 100px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container mt-5">
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header bg-primary text-white">
             <h4 class="text-center">Washing Machine Database Administration</h4>
           </div>
           <div class="card-body">
             <?php
               session_start(); 
-              include_once('config.php');
+              include_once('connect/config.php');
               if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
@@ -28,11 +37,11 @@
                   $row = $result->fetch_assoc();
                   $_SESSION['ID'] = $row['ID'];
                   if('Fabricator' == $username)
-                    header("Location: Fabricator_dashboard.php"); 
+                    header("Location:  Fabricator/Fabricator_dashboard.php"); 
                   else if('Sub_Assembly' == $username)
-                    header("Location: Sub_Assembly_dashboard.php");      
+                    header("Location: SubAssembly/Sub_Assembly_dashboard.php");      
                   else if('Assembly' == $username)
-                    header("Location: Assembly_dashboard.php");
+                    header("Location: Assembly/Assembly_dashboard.php");
                   else 
                     header("Location: admin_dashboard.php");
                 } else {
