@@ -33,4 +33,4 @@ The manufacturing company ' s supply chain process generates a large amount of i
 •	Deployed on Cloud<br><br>
 
 <b>PROJECT LINK</b><br>
-https://drive.google.com/drive/folders/13A_35HbGNlIU-ncpbiJnaD0nabjQPYam?usp=sharing<br>
+https://drive.google.com/drive/folders/13A_35HbGNlIU-ncpbiJnaD0nabjQPYam?usp=sharing <br>
